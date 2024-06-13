@@ -1,12 +1,14 @@
 import logging
 from datetime import datetime
 from logging.config import dictConfig
+from unittest.mock import patch
 
 import pytest
 
 from pytemplate.configurator.settings.base import LOGGING
-from pytemplate.domain.models import LogLevel
+from pytemplate.entrypoints.cli.main import main
 from pytemplate.service.logs import log
+from src.pytemplate.domain.models import LogLevel
 
 
 def test_log_debug_level():
@@ -115,3 +117,20 @@ def test_validate_log_level_invalid_none():
         kwargs = {"level": None}
         with log(**kwargs) as logger:
             pass
+
+
+@pytest.mark.parametrize(
+    "user_input, expected_output",
+    [
+        (["DEBUG"], "Main worked successfully!"),
+        (["INFO"], "Main worked successfully!"),
+        (["WARNING"], ""),
+        (["ERROR"], ""),
+        (["CRITICAL"], ""),
+    ],
+)
+def test_main(user_input, expected_output, capsys):
+    with patch("builtins.input", side_effect=user_input):
+        main()
+        captured = capsys.readouterr()
+        assert expected_output in captured.out
