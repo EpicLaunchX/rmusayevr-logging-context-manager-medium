@@ -2,6 +2,8 @@ import logging
 from datetime import datetime
 from logging.config import dictConfig
 
+import pytest
+
 from pytemplate.configurator.settings.base import LOGGING
 from pytemplate.domain.models import LogLevel
 from pytemplate.service.logs import log
@@ -80,3 +82,36 @@ def test_log_level_names():
     assert str(LogLevel.WARNING) == "LogLevel.WARNING"
     assert str(LogLevel.ERROR) == "LogLevel.ERROR"
     assert str(LogLevel.CRITICAL) == "LogLevel.CRITICAL"
+
+
+def dummy_log_function():
+    kwargs = {"level": "DEBUG"}
+    with log(**kwargs) as logger:
+        logger.debug("Hey there")
+        return "Validation passed successfully!"
+
+
+def test_validate_log_level_valid():
+    response = dummy_log_function()
+    assert response == "Validation passed successfully!"
+
+
+def test_validate_log_level_invalid_str():
+    with pytest.raises(KeyError):
+        kwargs = {"level": "INVALID"}
+        with log(**kwargs) as logger:
+            pass
+
+
+def test_validate_log_level_invalid_int():
+    with pytest.raises(KeyError):
+        kwargs = {"level": 20}
+        with log(**kwargs) as logger:
+            pass
+
+
+def test_validate_log_level_invalid_none():
+    with pytest.raises(KeyError):
+        kwargs = {"level": None}
+        with log(**kwargs) as logger:
+            pass
