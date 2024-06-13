@@ -1,7 +1,10 @@
 import logging
 from contextlib import contextmanager
 
+from pytemplate.domain.validators import validate_log_level
 
+
+@validate_log_level
 @contextmanager
 def log(level):
     logger = logging.getLogger()
