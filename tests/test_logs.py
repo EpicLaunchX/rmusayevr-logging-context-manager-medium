@@ -3,6 +3,7 @@ from datetime import datetime
 from logging.config import dictConfig
 
 from pytemplate.configurator.settings.base import LOGGING
+from pytemplate.domain.models import LogLevel
 from pytemplate.service.logs import log
 
 
@@ -63,3 +64,19 @@ def test_log_datetime(caplog):
     captured_date_format = [record.asctime for record in caplog.records][0]
     response = bool(datetime.strptime(captured_date_format, "%Y-%m-%d %H:%M:%S,%f"))
     assert response == True
+
+
+def test_log_level_values():
+    assert LogLevel.DEBUG.value == logging.DEBUG
+    assert LogLevel.INFO.value == logging.INFO
+    assert LogLevel.WARNING.value == logging.WARNING
+    assert LogLevel.ERROR.value == logging.ERROR
+    assert LogLevel.CRITICAL.value == logging.CRITICAL
+
+
+def test_log_level_names():
+    assert str(LogLevel.DEBUG) == "LogLevel.DEBUG"
+    assert str(LogLevel.INFO) == "LogLevel.INFO"
+    assert str(LogLevel.WARNING) == "LogLevel.WARNING"
+    assert str(LogLevel.ERROR) == "LogLevel.ERROR"
+    assert str(LogLevel.CRITICAL) == "LogLevel.CRITICAL"
