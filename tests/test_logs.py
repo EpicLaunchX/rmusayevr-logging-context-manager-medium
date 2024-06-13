@@ -98,7 +98,7 @@ def test_validate_log_level_valid():
 
 def test_validate_log_level_invalid_str():
     with pytest.raises(KeyError):
-        kwargs = {"level": "INVALID_LEVEL"}
+        kwargs = {"level": "INVALID"}
         with log(**kwargs) as logger:
             pass
 
