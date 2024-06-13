@@ -41,10 +41,10 @@ def test_log_critical_level():
     assert logger.level == logging.WARNING
 
 
-dictConfig(LOGGING)
 
 
 def test_logging_configuration(caplog):
+    dictConfig(LOGGING)
     logger = logging.getLogger("root")
 
     assert logger.level == logging.WARNING
